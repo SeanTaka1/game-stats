@@ -329,4 +329,44 @@ public class MapGameStatsCalculatorTest {
   }
 
   // Add more tests here!
+
+ @Test
+  public void gameCountReturnsOneForPersonWithSingleGame() {
+    String scoreData = "Nupur 10\n" + "Baya 30\n" + "Xinting 25\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    int actual = calculator.gameCount("Xinting");
+    assertEquals(1, actual);
+  }
+
+  @Test
+  public void gameCountWorksWithOnlyOnePerson() {
+    String scoreData = "Rohan 5\n" + "Rohan 7\n" + "Rohan 9\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    int actual = calculator.gameCount("Rohan");
+    assertEquals(3, actual);
+  }
+
+  @Test
+  public void gameCountCountsGamesWithNegativeScores() {
+    String scoreData = "Rohan -5\n" + "Rohan -10\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    int actual = calculator.gameCount("Rohan");
+    assertEquals(2, actual);
+  }
+
+  @Test
+  public void gameCountIsCaseSensitive() {
+    String scoreData = "Nupur 10\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    Executable act = () -> calculator.gameCount("nupur");
+    assertThrows(NoSuchElementException.class, act);
+  }
+
+  @Test
+  public void gameCountThrowsNoSuchElementExceptionForEmptyScoreData() {
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(""));
+    Executable act = () -> calculator.gameCount("Nupur");
+    assertThrows(NoSuchElementException.class, act);
+  }
+
 }
