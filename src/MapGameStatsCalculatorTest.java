@@ -458,4 +458,32 @@ public class MapGameStatsCalculatorTest {
     GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
     assertEquals(4.0 / 3.0, calculator.getAverageScore("Baya"), 0.001);
   }
+  
+  @Test
+  public void highestAverageScorerReturnsOnlyPersonWhenOnePerson() {
+    String scoreData = "Rohan 5\n" + "Rohan 15\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Rohan", calculator.highestAverageScorer());
+  }
+
+  @Test
+  public void highestAverageScorerBreaksTiesAlphabetically() {
+    String scoreData = "Xinting 20\n" + "Nupur 10\n" + "Nupur 30\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Nupur", calculator.highestAverageScorer());
+  }
+
+  @Test
+  public void highestAverageScorerWorksWithAllNegativeAverages() {
+    String scoreData = "Nupur -10\n" + "Nupur -20\n" + "Baya -5\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Baya", calculator.highestAverageScorer());
+  }
+
+  @Test
+  public void highestAverageScorerCanDifferFromHighestScorer() {
+    String scoreData = "Baya 100\n" + "Baya 0\n" + "Nupur 60\n" + "Nupur 60\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Nupur", calculator.highestAverageScorer());
+  }
 }
