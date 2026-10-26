@@ -431,4 +431,31 @@ public class MapGameStatsCalculatorTest {
     GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
     assertEquals("Baya", calculator.highestScorer());
   }
+
+   @Test
+  public void getAverageScoreReturnsScoreForSingleGame() {
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner("Xinting 25\n"));
+    assertEquals(25.0, calculator.getAverageScore("Xinting"), 0.001);
+  }
+
+  @Test
+  public void getAverageScoreDoesNotUseIntegerDivision() {
+    String scoreData = "Rohan 3\n" + "Rohan 4\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(3.5, calculator.getAverageScore("Rohan"), 0.001);
+  }
+
+  @Test
+  public void getAverageScoreHandlesNegativeScores() {
+    String scoreData = "Rohan -10\n" + "Rohan -20\n" + "Rohan 0\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(-10.0, calculator.getAverageScore("Rohan"), 0.001);
+  }
+
+  @Test
+  public void getAverageScoreHandlesNonTerminatingDecimal() {
+    String scoreData = "Baya 1\n" + "Baya 1\n" + "Baya 2\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(4.0 / 3.0, calculator.getAverageScore("Baya"), 0.001);
+  }
 }
