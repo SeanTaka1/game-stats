@@ -369,4 +369,38 @@ public class MapGameStatsCalculatorTest {
     assertThrows(NoSuchElementException.class, act);
   }
 
+  @Test
+  public void highScoreReturnsOnlyScoreForPersonWithSingleGame() {
+    String scoreData = "Nupur 10\n" + "Xinting 25\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(25, calculator.highScore("Xinting"));
+  }
+
+  @Test
+  public void highScoreHandlesAllNegativeScores() {
+    String scoreData = "Rohan -50\n" + "Rohan -3\n" + "Rohan -20\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(-3, calculator.highScore("Rohan"));
+  }
+
+  @Test
+  public void highScoreHandlesMixOfNegativeAndPositiveScores() {
+    String scoreData = "Rohan -50\n" + "Rohan 0\n" + "Rohan -20\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(0, calculator.highScore("Rohan"));
+  }
+
+  @Test
+  public void highScoreFindsHighestWhenItIsTheFirstGame() {
+    String scoreData = "Baya 99\n" + "Baya 1\n" + "Baya 50\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(99, calculator.highScore("Baya"));
+  }
+
+  @Test
+  public void highScoreIsTrackedSeparatelyPerPerson() {
+    String scoreData = "Nupur 10\n" + "Baya 100\n" + "Nupur 20\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals(20, calculator.highScore("Nupur"));
+  }
 }
