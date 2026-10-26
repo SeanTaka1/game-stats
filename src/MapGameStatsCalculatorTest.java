@@ -403,4 +403,32 @@ public class MapGameStatsCalculatorTest {
     GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
     assertEquals(20, calculator.highScore("Nupur"));
   }
+ 
+  @Test
+  public void highestScorerReturnsOnlyPersonWhenOnePerson() {
+    String scoreData = "Rohan 5\n" + "Rohan 7\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Rohan", calculator.highestScorer());
+  }
+
+  @Test
+  public void highestScorerBreaksTiesAlphabetically() {
+    String scoreData = "Xinting 50\n" + "Baya 50\n" + "Nupur 50\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Baya", calculator.highestScorer());
+  }
+
+  @Test
+  public void highestScorerWorksWithAllNegativeScores() {
+    String scoreData = "Nupur -10\n" + "Baya -30\n" + "Xinting -5\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Xinting", calculator.highestScorer());
+  }
+
+  @Test
+  public void highestScorerUsesSingleBestGameNotTotal() {
+    String scoreData = "Nupur 40\n" + "Nupur 40\n" + "Nupur 40\n" + "Baya 45\n";
+    GameStatsCalculator calculator = new MapGameStatsCalculator(new Scanner(scoreData));
+    assertEquals("Baya", calculator.highestScorer());
+  }
 }
